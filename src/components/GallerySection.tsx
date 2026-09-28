@@ -46,7 +46,7 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ gallery }) => {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`gordonstoun-pill px-5 py-2 text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer shadow-xs ${
+              className={`gordonstoun-pill px-5 py-2 text-xs font-bold transition-all duration-300 cursor-pointer shadow-xs ${
                 selectedCategory === cat
                   ? 'bg-slate-900 text-[#D4AF37] shadow-md scale-105'
                   : 'bg-white/80 hover:bg-white text-slate-700 hover:text-slate-950'

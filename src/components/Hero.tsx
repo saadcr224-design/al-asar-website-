@@ -36,7 +36,7 @@ export const Hero: React.FC<HeroProps> = ({ settings, onNavigate, onOpenParentPo
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 sm:space-y-8">
         
         {/* Floating Admission Status Pill - Zero Rectangle Box */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md text-[#D4AF37] text-xs sm:text-sm font-bold shadow-lg transition-all duration-300 hover:scale-105 animate-gordonstoun-float">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md text-[#D4AF37] text-xs font-bold shadow-lg transition-all duration-300 hover:scale-105 animate-gordonstoun-float">
           <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
           <span>{settings.admissionStatus || 'Admissions Open 2025–2026'}</span>
         </div>
@@ -59,7 +59,7 @@ export const Hero: React.FC<HeroProps> = ({ settings, onNavigate, onOpenParentPo
           <button
             onClick={() => onNavigate('admissions')}
             id="hero-apply-button"
-            className="w-full sm:w-auto gordonstoun-pill gordonstoun-glow-gold inline-flex items-center justify-center gap-2.5 px-8 py-3.5 bg-[#D4AF37] hover:bg-[#c4a030] text-slate-950 font-bold text-sm sm:text-base shadow-xl transition-all duration-300 active:scale-95 cursor-pointer min-h-[46px]"
+            className="w-full sm:w-auto gordonstoun-pill gordonstoun-glow-gold inline-flex items-center justify-center gap-2.5 px-8 py-3.5 bg-[#D4AF37] hover:bg-[#c4a030] text-slate-950 font-bold text-sm shadow-xl transition-all duration-300 active:scale-95 cursor-pointer min-h-[46px]"
           >
             <FileCheck className="w-4 h-4 text-slate-950 shrink-0" />
             <span>Apply for Admission (2025–26)</span>
@@ -69,7 +69,7 @@ export const Hero: React.FC<HeroProps> = ({ settings, onNavigate, onOpenParentPo
           <button
             onClick={() => onNavigate('about')}
             id="hero-about-button"
-            className="w-full sm:w-auto gordonstoun-pill inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white/15 hover:bg-white/25 text-white font-semibold text-sm sm:text-base backdrop-blur-md shadow-lg transition-all duration-300 active:scale-95 cursor-pointer min-h-[46px]"
+            className="w-full sm:w-auto gordonstoun-pill inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white/15 hover:bg-white/25 text-white font-semibold text-sm backdrop-blur-md shadow-lg transition-all duration-300 active:scale-95 cursor-pointer min-h-[46px]"
           >
             <BookOpen className="w-4 h-4 text-amber-300 shrink-0" />
             <span>About School</span>
@@ -79,7 +79,7 @@ export const Hero: React.FC<HeroProps> = ({ settings, onNavigate, onOpenParentPo
             <button
               onClick={onOpenParentPortal}
               id="hero-parent-portal-button"
-              className="w-full sm:w-auto gordonstoun-pill inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#003366]/80 hover:bg-[#003366] text-[#D4AF37] font-semibold text-sm sm:text-base backdrop-blur-md shadow-lg transition-all duration-300 active:scale-95 cursor-pointer min-h-[46px]"
+              className="w-full sm:w-auto gordonstoun-pill inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#003366]/80 hover:bg-[#003366] text-[#D4AF37] font-semibold text-sm backdrop-blur-md shadow-lg transition-all duration-300 active:scale-95 cursor-pointer min-h-[46px]"
             >
               <Users className="w-4 h-4 text-[#D4AF37] shrink-0" />
               <span>Parent Portal</span>

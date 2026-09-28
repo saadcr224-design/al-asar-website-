@@ -1,6 +1,8 @@
+import 'dotenv/config';
 import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fs from 'fs';
+import { randomBytes } from 'crypto';
 import cors from 'cors';
 import { createServer as createViteServer } from 'vite';
 import { db } from './server/db.ts';
@@ -9,7 +11,7 @@ import { db } from './server/db.ts';
 const ACTIVE_TOKENS = new Set<string>();
 
 function generateToken(): string {
-  return 'asar_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+  return randomBytes(32).toString('hex');
 }
 
 function requireAuth(req: Request, res: Response, next: NextFunction) {
@@ -18,7 +20,7 @@ function requireAuth(req: Request, res: Response, next: NextFunction) {
     return res.status(401).json({ error: 'Unauthorized: Missing token' });
   }
   const token = authHeader.split(' ')[1];
-  if (!ACTIVE_TOKENS.has(token) && !token.startsWith('asar_')) {
+  if (!ACTIVE_TOKENS.has(token)) {
     return res.status(401).json({ error: 'Unauthorized: Invalid or expired session' });
   }
   ACTIVE_TOKENS.add(token);
@@ -26,7 +28,7 @@ function requireAuth(req: Request, res: Response, next: NextFunction) {
 }
 
 // Uploads directory for permanent image storage
-const UPLOADS_DIR = path.join(process.cwd(), 'public', 'uploads');
+const UPLOADS_DIR = path.resolve(process.env.UPLOADS_DIR || path.join(process.cwd(), 'public', 'uploads'));
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
@@ -67,7 +69,7 @@ export function saveBase64Image(dataUrl: string | undefined): string {
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
   app.use(cors());
   app.use(express.json({ limit: '50mb' }));
@@ -75,6 +77,9 @@ async function startServer() {
 
   // Initialize Database
   db.init();
+  if (process.env.NODE_ENV === 'production' && db.getSettings().adminPasswordHash === '9159224') {
+    throw new Error('Set ADMIN_PASSWORD to a strong, unique value before starting in production.');
+  }
 
   // ----------------------------------------------------
   // API ROUTES
@@ -92,7 +97,7 @@ async function startServer() {
     if (!password) {
       return res.status(400).json({ error: 'Password is required' });
     }
-    if (password === settings.adminPasswordHash || password === '9159224') {
+    if (password === settings.adminPasswordHash) {
       const token = generateToken();
       ACTIVE_TOKENS.add(token);
       return res.json({ success: true, token });
@@ -126,7 +131,7 @@ async function startServer() {
     if (!currentPassword || !newPassword) {
       return res.status(400).json({ error: 'Current and new password required' });
     }
-    if (currentPassword !== settings.adminPasswordHash && currentPassword !== '9159224') {
+    if (currentPassword !== settings.adminPasswordHash) {
       return res.status(400).json({ error: 'Current password is incorrect' });
     }
     db.updateSettings({ adminPasswordHash: newPassword });
@@ -445,7 +450,7 @@ async function startServer() {
   });
 
   // Uploads directory for permanent image storage
-  const UPLOADS_DIR = path.join(process.cwd(), 'public', 'uploads');
+  const UPLOADS_DIR = path.resolve(process.env.UPLOADS_DIR || path.join(process.cwd(), 'public', 'uploads'));
   if (!fs.existsSync(UPLOADS_DIR)) {
     fs.mkdirSync(UPLOADS_DIR, { recursive: true });
   }

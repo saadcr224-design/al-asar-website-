@@ -82,7 +82,7 @@ export const AcademicsSection: React.FC<AcademicsSectionProps> = ({
             </div>
             <button
               onClick={onOpenApply}
-              className="gordonstoun-pill gordonstoun-glow-gold inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-950 bg-[#D4AF37] hover:bg-[#c4a030] px-6 py-2.5 rounded-full shadow-md self-start sm:self-auto cursor-pointer transition-all active:scale-95"
+              className="gordonstoun-pill gordonstoun-glow-gold inline-flex items-center gap-2 text-xs font-bold text-slate-950 bg-[#D4AF37] hover:bg-[#c4a030] px-6 py-2.5 rounded-full shadow-md self-start sm:self-auto cursor-pointer transition-all active:scale-95"
             >
               <span>Enquire for Class Admission</span>
               <ArrowRight className="w-4 h-4" />

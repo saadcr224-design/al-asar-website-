@@ -460,7 +460,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={() => handleNavClick("admissions")}
               id="header-apply-button"
-              className="gordonstoun-pill gordonstoun-glow-navy inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full bg-gradient-to-r from-[#003366] to-[#002244] hover:from-[#002244] hover:to-slate-950 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-xl transition-all duration-300 active:scale-95 cursor-pointer min-h-[38px]"
+              className="gordonstoun-pill gordonstoun-glow-navy inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full bg-gradient-to-r from-[#003366] to-[#002244] hover:from-[#002244] hover:to-slate-950 text-white font-bold text-xs shadow-md hover:shadow-xl transition-all duration-300 active:scale-95 cursor-pointer min-h-[38px]"
             >
               <FileCheck className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
               <span className="hidden xs:inline">Admissions 2025–26</span>

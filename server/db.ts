@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-const DATA_DIR = path.join(process.cwd(), 'data');
+const DATA_DIR = path.resolve(process.env.DATA_DIR || path.join(process.cwd(), 'data'));
 const DB_FILE = path.join(DATA_DIR, 'school_data.json');
+const DEFAULT_ADMIN_PASSWORD = '9159224';
 
 export interface SchoolSettings {
   id: string;
@@ -181,7 +182,7 @@ const DEFAULT_SETTINGS: SchoolSettings = {
   welcomeImage: '',
   logoUrl: '/uploads/img_1790579644773_ithkbu.jpg',
   backgroundImage: '/uploads/img_1790579009641_m44vh9.jpg',
-  adminPasswordHash: '9159224' // Updated admin password
+  adminPasswordHash: process.env.ADMIN_PASSWORD || DEFAULT_ADMIN_PASSWORD
 };
 
 const DEFAULT_CLASSES: SchoolClass[] = [
@@ -360,52 +361,36 @@ const DEFAULT_EVENTS: SchoolEvent[] = [
 
 const DEFAULT_GALLERY: GalleryItem[] = [
   {
-    id: 'gal-1',
-    title: 'Primary Classroom Learning',
+    id: 'gal-primary-classroom',
+    title: 'Primary Classroom Learning & Engagement',
     category: 'Classroom',
-    imageUrl: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
-    caption: 'Students engaged in interactive classroom lessons with dedicated teachers.',
-    createdAt: new Date().toISOString()
+    imageUrl: '/uploads/img_1790581045444_27x8pk.jpg',
+    caption: 'Students actively engaged with foundational learning materials, books, and attentive primary school teachers.',
+    createdAt: '2026-09-28T07:30:02.000Z'
   },
   {
-    id: 'gal-2',
-    title: 'Early Childhood Play & Learning',
-    category: 'Activities',
-    imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80',
-    caption: 'Playgroup and nursery children learning through guided educational activities.',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'gal-3',
-    title: 'Creative Art & Coloring Session',
-    category: 'Activities',
-    imageUrl: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=800&q=80',
-    caption: 'Students developing fine motor skills and creativity in drawing sessions.',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'gal-4',
-    title: 'Outdoor Physical Sports',
-    category: 'Sports',
-    imageUrl: 'https://images.unsplash.com/photo-1526676037777-05a232554f77?auto=format&fit=crop&w=800&q=80',
-    caption: 'Joyful physical exercise and sports games in the school play area.',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'gal-5',
-    title: 'Morning Assembly & Discipline',
+    id: 'gal-morning-assembly',
+    title: 'Morning Assembly & Student Presentations',
     category: 'School',
-    imageUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80',
-    caption: 'Morning prayer, recitation, and discipline in daily morning assembly.',
-    createdAt: new Date().toISOString()
+    imageUrl: '/uploads/img_1790581026557_cshcs2.jpg',
+    caption: 'Disciplined morning assembly in the courtyard featuring student speech presentations and daily prayer.',
+    createdAt: '2026-09-28T07:30:03.000Z'
   },
   {
-    id: 'gal-6',
-    title: 'Reading & Storytelling Corner',
-    category: 'Classroom',
-    imageUrl: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800&q=80',
-    caption: 'Cultivating strong reading habits in early childhood students.',
-    createdAt: new Date().toISOString()
+    id: 'gal-sports-activities',
+    title: 'Sports Day & Physical Activity Sessions',
+    category: 'Sports',
+    imageUrl: '/uploads/img_1790581007752_8s07yg.jpg',
+    caption: 'Active outdoor games, team sports, and agility exercises promoting health and teamwork.',
+    createdAt: '2026-09-28T07:30:04.000Z'
+  },
+  {
+    id: 'gal-annual-gathering',
+    title: 'Annual School Gathering & Community Function',
+    category: 'Events',
+    imageUrl: '/uploads/img_1790581421678_53pmmh.jpg',
+    caption: 'Parents, students, and teachers gathered for the grand annual community ceremony under the Al-Asar canopy.',
+    createdAt: '2026-09-28T07:30:00.000Z'
   }
 ];
 
@@ -448,8 +433,8 @@ class Database {
           ...defaults.settings,
           ...(parsed.settings || {})
         };
-        if (!mergedSettings.adminPasswordHash || mergedSettings.adminPasswordHash === 'admin123') {
-          mergedSettings.adminPasswordHash = '9159224';
+        if (!mergedSettings.adminPasswordHash || mergedSettings.adminPasswordHash === 'admin123' || mergedSettings.adminPasswordHash === DEFAULT_ADMIN_PASSWORD) {
+          mergedSettings.adminPasswordHash = process.env.ADMIN_PASSWORD || DEFAULT_ADMIN_PASSWORD;
         }
 
         this.data = {

@@ -96,7 +96,7 @@ export const Footer: React.FC<FooterProps> = ({
                   href={googleMapsDirectionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="gordonstoun-pill inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#003366] hover:bg-[#002244] text-[#D4AF37] hover:text-white text-xs sm:text-sm font-bold shadow-md transition-all active:scale-95"
+                  className="gordonstoun-pill inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#003366] hover:bg-[#002244] text-xs text-[#D4AF37] hover:text-white font-bold shadow-md transition-all active:scale-95"
                 >
                   <Navigation className="w-4 h-4" />
                   <span>Get Directions on Google Maps</span>
@@ -108,7 +108,7 @@ export const Footer: React.FC<FooterProps> = ({
                     href={`https://wa.me/${settings.whatsappNumber.replace(/[^0-9]/g, "")}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="gordonstoun-pill inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-md transition-all active:scale-95"
+                    className="gordonstoun-pill inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md transition-all active:scale-95"
                   >
                     <MessageCircle className="w-4 h-4" />
                     <span>WhatsApp Inquiry</span>
@@ -118,7 +118,7 @@ export const Footer: React.FC<FooterProps> = ({
                 {settings.phone && (
                   <a
                     href={`tel:${settings.phone}`}
-                    className="gordonstoun-pill inline-flex items-center gap-2 px-5 py-3 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs sm:text-sm font-semibold transition-all"
+                    className="gordonstoun-pill inline-flex items-center gap-2 px-5 py-3 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold transition-all"
                   >
                     <Phone className="w-3.5 h-3.5 text-emerald-400" />
                     <span>{settings.phone}</span>

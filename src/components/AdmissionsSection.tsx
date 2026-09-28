@@ -406,7 +406,7 @@ export const AdmissionsSection: React.FC<AdmissionsSectionProps> = ({
                   type="submit"
                   disabled={isSubmitting}
                   id="submit-admission-form-button"
-                  className="w-full py-4 px-8 rounded-full gordonstoun-pill gordonstoun-glow-gold bg-[#D4AF37] hover:bg-[#c4a030] text-[#002244] font-extrabold text-sm sm:text-base shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2.5 disabled:opacity-70 cursor-pointer active:scale-98"
+                  className="w-full py-4 px-8 rounded-full gordonstoun-pill gordonstoun-glow-gold bg-[#D4AF37] hover:bg-[#c4a030] text-[#002244] font-extrabold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2.5 disabled:opacity-70 cursor-pointer active:scale-98"
                 >
                   {isSubmitting ? (
                     <>

@@ -214,23 +214,15 @@
       "id": "gal-annual-gathering",
       "title": "Annual School Gathering & Community Function",
       "category": "Events",
-      "imageUrl": "/uploads/gallery_annual_gathering_1790580603298.jpg",
+      "imageUrl": "/uploads/img_1790581421678_53pmmh.jpg",
       "caption": "Parents, students, and teachers gathered for the grand annual community ceremony under the Al-Asar canopy.",
       "createdAt": "2026-09-28T07:30:00.000Z"
-    },
-    {
-      "id": "gal-prize-distribution",
-      "title": "Annual Prize Distribution & Merit Awards",
-      "category": "Events",
-      "imageUrl": "/uploads/gallery_prize_distribution_1790580618074.jpg",
-      "caption": "Celebrating student academic achievements with merit shields, trophies, and certificates on stage.",
-      "createdAt": "2026-09-28T07:30:01.000Z"
     },
     {
       "id": "gal-primary-classroom",
       "title": "Primary Classroom Learning & Engagement",
       "category": "Classroom",
-      "imageUrl": "/uploads/gallery_primary_classroom_1790580631328.jpg",
+      "imageUrl": "/uploads/img_1790581045444_27x8pk.jpg",
       "caption": "Students actively engaged with foundational learning materials, books, and attentive primary school teachers.",
       "createdAt": "2026-09-28T07:30:02.000Z"
     },
@@ -238,7 +230,7 @@
       "id": "gal-morning-assembly",
       "title": "Morning Assembly & Student Presentations",
       "category": "School",
-      "imageUrl": "/uploads/gallery_morning_assembly_1790580642009.jpg",
+      "imageUrl": "/uploads/img_1790581026557_cshcs2.jpg",
       "caption": "Disciplined morning assembly in the courtyard featuring student speech presentations and daily prayer.",
       "createdAt": "2026-09-28T07:30:03.000Z"
     },
@@ -246,7 +238,7 @@
       "id": "gal-sports-activities",
       "title": "Sports Day & Physical Activity Sessions",
       "category": "Sports",
-      "imageUrl": "/uploads/gallery_sports_activities_1790580654523.jpg",
+      "imageUrl": "/uploads/img_1790581007752_8s07yg.jpg",
       "caption": "Active outdoor games, team sports, and agility exercises promoting health and teamwork.",
       "createdAt": "2026-09-28T07:30:04.000Z"
     }

@@ -139,7 +139,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ settings }) => {
                 type="button"
                 onClick={() => handleLaunchWhatsApp()}
                 id="contact-section-direct-whatsapp-btn"
-                className="w-full py-4 px-8 rounded-full gordonstoun-pill bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-950 font-extrabold text-sm sm:text-base shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-98"
+                className="w-full py-4 px-8 rounded-full gordonstoun-pill bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-950 font-extrabold text-sm shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-98"
               >
                 <MessageCircle className="w-5 h-5 fill-slate-950 text-slate-950 shrink-0" />
                 <span>Open WhatsApp Chat ({officialWhatsapp})</span>
@@ -168,7 +168,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ settings }) => {
               <a
                 href={`tel:${officialPhone}`}
                 id="contact-section-call-button"
-                className="gordonstoun-pill inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#003366] hover:bg-[#002244] text-[#D4AF37] hover:text-white font-bold text-xs sm:text-sm shadow-md transition-all shrink-0 cursor-pointer active:scale-95"
+                className="gordonstoun-pill inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#003366] hover:bg-[#002244] text-[#D4AF37] hover:text-white font-bold text-xs shadow-md transition-all shrink-0 cursor-pointer active:scale-95"
               >
                 <Phone className="w-4 h-4" />
                 <span>Call School Office</span>
@@ -255,7 +255,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ settings }) => {
                 href="https://www.google.com/maps/search/?api=1&query=Lahor+Swabi+Khyber+Pakhtunkhwa+Pakistan"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="gordonstoun-pill w-full py-3.5 px-6 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="gordonstoun-pill w-full py-3.5 px-6 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Navigation className="w-4 h-4 text-[#D4AF37]" />
                 <span>Open in Google Maps (Get Directions)</span>
