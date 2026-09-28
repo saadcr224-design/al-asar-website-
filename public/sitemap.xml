@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Home Page -->
+  <url>
+    <loc>https://al-asar-school.edu.pk/</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://al-asar-school.edu.pk/assets/website-background.jpg</image:loc>
+      <image:title>Al-Asar International Model School Campus in Lahor Swabi</image:title>
+      <image:caption>Al-Asar International Model School building and learning environment in Lahor, Swabi, Khyber Pakhtunkhwa, Pakistan</image:caption>
+    </image:image>
+  </url>
+
+  <!-- About Us Section -->
+  <url>
+    <loc>https://al-asar-school.edu.pk/#about</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Academics & Curriculum Section -->
+  <url>
+    <loc>https://al-asar-school.edu.pk/#academics</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Admissions & Online Enquiry -->
+  <url>
+    <loc>https://al-asar-school.edu.pk/#admissions</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- School Activities & Co-Curricular -->
+  <url>
+    <loc>https://al-asar-school.edu.pk/#activities</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- News, Notices & Announcements -->
+  <url>
+    <loc>https://al-asar-school.edu.pk/#events</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Photo Gallery -->
+  <url>
+    <loc>https://al-asar-school.edu.pk/#gallery</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Contact & Location Lahor Swabi -->
+  <url>
+    <loc>https://al-asar-school.edu.pk/#contact</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+</urlset>

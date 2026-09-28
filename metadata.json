@@ -1,0 +1,6 @@
+{
+  "name": "Al-Asar International Model School",
+  "description": "Primary school website and admissions portal for Al-Asar International Model School in Lahor, Swabi, Khyber Pakhtunkhwa. Registration PSRA-SWB-00085286-25.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

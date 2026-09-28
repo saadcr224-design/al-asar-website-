@@ -1,0 +1,821 @@
+import fs from 'fs';
+import path from 'path';
+
+const DATA_DIR = path.join(process.cwd(), 'data');
+const DB_FILE = path.join(DATA_DIR, 'school_data.json');
+
+export interface SchoolSettings {
+  id: string;
+  name: string;
+  subName: string;
+  tagline: string;
+  level: string;
+  location: string;
+  city: string;
+  district: string;
+  province: string;
+  country: string;
+  registrationNumber: string;
+  registrationAuthority: string;
+  status: string;
+  phone: string;
+  whatsappNumber: string;
+  email: string;
+  schoolTimings: string;
+  admissionStatus: string;
+  admissionProcedure: string;
+  eligibilityInfo: string;
+  requiredDocuments: string;
+  feeInfo: string;
+  googleMapEmbedUrl: string;
+  facebookUrl: string;
+  instagramUrl: string;
+  youtubeUrl: string;
+  heroIntroduction: string;
+  welcomeText: string;
+  aboutText: string;
+  mission: string;
+  vision: string;
+  principalName: string;
+  principalMessage: string;
+  principalPhoto: string;
+  heroImage?: string;
+  welcomeImage?: string;
+  backgroundImage?: string;
+  logoUrl?: string;
+  adminPasswordHash: string;
+}
+
+export interface SchoolClass {
+  id: string;
+  name: string;
+  ageGroup: string;
+  description: string;
+  order: number;
+}
+
+export interface SchoolSubject {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  order: number;
+}
+
+export interface Teacher {
+  id: string;
+  name: string;
+  position: string;
+  bio: string;
+  photo: string;
+  order: number;
+}
+
+export interface Activity {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  image: string;
+  order: number;
+}
+
+export interface SchoolEvent {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  description: string;
+  image?: string;
+  isImportant?: boolean;
+  createdAt: string;
+}
+
+export interface GalleryItem {
+  id: string;
+  title: string;
+  category: 'School' | 'Classroom' | 'Activities' | 'Events' | 'Sports';
+  imageUrl: string;
+  caption?: string;
+  createdAt: string;
+}
+
+export interface AdmissionApplication {
+  id: string;
+  referenceNumber: string;
+  studentName: string;
+  fatherName: string;
+  dateOfBirth: string;
+  gender: 'Male' | 'Female' | 'Other';
+  applyingClass: string;
+  parentPhone: string;
+  whatsappNumber: string;
+  address: string;
+  previousSchool?: string;
+  message?: string;
+  status: 'Pending' | 'Reviewed' | 'Contacted' | 'Accepted' | 'Archived';
+  adminNotes?: string;
+  submittedAt: string;
+}
+
+export interface ContactMessage {
+  id: string;
+  name: string;
+  phone: string;
+  email?: string;
+  subject?: string;
+  message: string;
+  isRead: boolean;
+  status: 'New' | 'Replied' | 'Archived';
+  submittedAt: string;
+}
+
+export interface DatabaseSchema {
+  settings: SchoolSettings;
+  classes: SchoolClass[];
+  subjects: SchoolSubject[];
+  teachers: Teacher[];
+  activities: Activity[];
+  events: SchoolEvent[];
+  gallery: GalleryItem[];
+  admissions: AdmissionApplication[];
+  contactMessages: ContactMessage[];
+}
+
+const DEFAULT_SETTINGS: SchoolSettings = {
+  id: 'default',
+  name: 'Al-Asar International Model School',
+  subName: 'Lahor Swabi',
+  tagline: 'Learning Today, Growing Tomorrow',
+  level: 'Primary School (Playgroup to Grade 5)',
+  location: 'Lahor (Chota Lahore), Swabi, Khyber Pakhtunkhwa, Pakistan',
+  city: 'Lahor (Chota Lahore)',
+  district: 'Swabi',
+  province: 'Khyber Pakhtunkhwa',
+  country: 'Pakistan',
+  registrationNumber: 'PSRA-SWB-00085286-25',
+  registrationAuthority: 'KP Private Schools Regulatory Authority (KPPSRA)',
+  status: 'Active',
+  phone: '03404333571',
+  whatsappNumber: '03404333571',
+  email: '', // Editable from admin
+  schoolTimings: 'Monday – Thursday: 8:00 AM – 1:30 PM | Friday: 8:00 AM – 12:00 PM',
+  admissionStatus: 'Admissions Open for Session 2025–2026',
+  admissionProcedure: '1. Complete and submit the online admission application form or visit the school office.\n2. Submit student\'s Birth Certificate / B-Form copy along with 2 passport photographs.\n3. Short friendly assessment and parent discussion.\n4. Confirmation and issuance of admission slip.',
+  eligibilityInfo: 'Children seeking primary education in Playgroup, Nursery, Prep, and Grades 1 through 5.',
+  requiredDocuments: '• Student B-Form / Birth Certificate (copy)\n• Father or Guardian CNIC (copy)\n• 2 Passport-size photographs\n• Previous School Leaving Certificate (for Grade 1 and above, if applicable)',
+  feeInfo: 'For current admission and fee structure details, please contact the school administration office.',
+  googleMapEmbedUrl: 'https://maps.google.com/maps?q=Lahor+Swabi+Khyber+Pakhtunkhwa+Pakistan&t=&z=13&ie=UTF8&iwloc=&output=embed',
+  facebookUrl: '',
+  instagramUrl: '',
+  youtubeUrl: '',
+  heroIntroduction: 'Providing children with a positive learning environment, foundational education, good manners, self-confidence, and character development in Lahor, Swabi.',
+  welcomeText: 'Al-Asar International Model School is dedicated to nurturing young minds during their most crucial foundational years. Situated in Lahor (Chota Lahore), Swabi, we provide child-friendly primary education focused on basic academic concepts, discipline, respect, and creative growth with caring and attentive teachers.',
+  aboutText: 'Al-Asar International Model School serves children and families in Lahor, Swabi and adjacent areas. As a dedicated primary institution, we focus on fundamental literacy, mathematical thinking, Islamic and moral values, and student confidence in a safe, disciplined environment.',
+  mission: 'To provide young children with a strong educational foundation and help them develop good habits, confidence, discipline, and positive character.',
+  vision: 'To help young students become confident, responsible, and successful learners equipped for future educational milestones.',
+  principalName: '', // Editable from admin
+  principalMessage: 'Welcome to Al-Asar International Model School. Our primary goal is to foster a safe, cheerful, and disciplined learning environment where children build solid foundational skills and moral values. We partner with parents to ensure every child is guided with care, patience, and encouragement.',
+  principalPhoto: '',
+  heroImage: '',
+  welcomeImage: '',
+  logoUrl: '/uploads/img_1790579644773_ithkbu.jpg',
+  backgroundImage: '/uploads/img_1790579009641_m44vh9.jpg',
+  adminPasswordHash: '9159224' // Updated admin password
+};
+
+const DEFAULT_CLASSES: SchoolClass[] = [
+  {
+    id: 'class-pg',
+    name: 'Playgroup (Pre-Nursery)',
+    ageGroup: 'Age 3 – 4 Years',
+    description: 'Play-based early learning focusing on motor skills, phonics sounds, colors, socialization, and confidence.',
+    order: 1
+  },
+  {
+    id: 'class-nur',
+    name: 'Nursery',
+    ageGroup: 'Age 4 – 5 Years',
+    description: 'Introduction to letter tracing, number recognition, basic Urdu & English vocabulary, and structured habits.',
+    order: 2
+  },
+  {
+    id: 'class-prep',
+    name: 'Prep (Kindergarten)',
+    ageGroup: 'Age 5 – 6 Years',
+    description: 'Preparation for formal schooling with reading readiness, basic addition/subtraction, writing skills, and manners.',
+    order: 3
+  },
+  {
+    id: 'class-1',
+    name: 'Grade 1',
+    ageGroup: 'Age 6 – 7 Years',
+    description: 'Foundations of reading comprehension, basic mathematics, Urdu reading, General Knowledge, and Islamiat.',
+    order: 4
+  },
+  {
+    id: 'class-2',
+    name: 'Grade 2',
+    ageGroup: 'Age 7 – 8 Years',
+    description: 'Sentence formation, mental math, primary science concepts, handwriting improvement, and moral lessons.',
+    order: 5
+  },
+  {
+    id: 'class-3',
+    name: 'Grade 3',
+    ageGroup: 'Age 8 – 9 Years',
+    description: 'Developing independent reading, word problems in mathematics, general science explorations, and conversational confidence.',
+    order: 6
+  },
+  {
+    id: 'class-4',
+    name: 'Grade 4',
+    ageGroup: 'Age 9 – 10 Years',
+    description: 'Enhanced conceptual learning in Science, Mathematics, English grammar, Social Studies, and Islamic studies.',
+    order: 7
+  },
+  {
+    id: 'class-5',
+    name: 'Grade 5',
+    ageGroup: 'Age 10 – 11 Years',
+    description: 'Comprehensive primary curriculum mastery, problem-solving, moral development, and preparation for middle school.',
+    order: 8
+  }
+];
+
+const DEFAULT_SUBJECTS: SchoolSubject[] = [
+  {
+    id: 'sub-eng',
+    name: 'English',
+    description: 'Phonics, reading fluency, vocabulary, spelling, and sentence construction for early learners.',
+    category: 'Languages',
+    order: 1
+  },
+  {
+    id: 'sub-math',
+    name: 'Mathematics',
+    description: 'Number sense, basic arithmetic, counting, shapes, measurements, and simple word problems.',
+    category: 'Core Academics',
+    order: 2
+  },
+  {
+    id: 'sub-urdu',
+    name: 'Urdu',
+    description: 'Huroof-e-Tahajji, reading comprehension, handwriting (Khushkhati), and spoken expression.',
+    category: 'Languages',
+    order: 3
+  },
+  {
+    id: 'sub-sci',
+    name: 'General Science',
+    description: 'Exploring the natural world, living things, plants, animals, weather, and healthy living habits.',
+    category: 'Core Academics',
+    order: 4
+  },
+  {
+    id: 'sub-isl',
+    name: 'Islamiat & Nazra Quran',
+    description: 'Basic Islamic ethics, Duas, Kalimas, Tajweed basics, good manners (Adaab), and prophetic stories.',
+    category: 'Moral Education',
+    order: 5
+  },
+  {
+    id: 'sub-art',
+    name: 'Art & Drawing',
+    description: 'Creative coloring, sketching, paper craft, and fine motor skill enhancement.',
+    category: 'Co-Curricular',
+    order: 6
+  }
+];
+
+const DEFAULT_TEACHERS: Teacher[] = [];
+
+const DEFAULT_ACTIVITIES: Activity[] = [
+  {
+    id: 'act-1',
+    title: 'Physical Sports & Play Activities',
+    description: 'Healthy physical exercise, tag games, friendly sports races, and outdoor play that develop motor skills, teamwork, and agility.',
+    category: 'Sports',
+    image: '/uploads/img_1790579103925_q5nz45.jpg',
+    order: 1
+  },
+  {
+    id: 'act-2',
+    title: 'Drawing & Creative Coloring',
+    description: 'Engaging art sessions where children express their creativity, explore colors, and enhance their concentration and coordination.',
+    category: 'Art & Craft',
+    image: '/uploads/img_1790579149646_m6xmkj.jpg',
+    order: 2
+  },
+  {
+    id: 'act-3',
+    title: 'Reading Circles & Storytelling',
+    description: 'Interactive classroom story sessions that cultivate an early love for books, improve listening skills, and expand vocabulary.',
+    category: 'Literacy',
+    image: '/uploads/img_1790579190596_f6464r.jpg',
+    order: 3
+  },
+  {
+    id: 'act-4',
+    title: 'School Celebrations & Special Days',
+    description: 'Observing National Days, Pakistan Day, Eid celebrations, and Annual Prize Distribution events to build student confidence.',
+    category: 'Celebrations',
+    image: '/uploads/img_1790579246366_pqjt7r.jpg',
+    order: 4
+  }
+];
+
+const DEFAULT_EVENTS: SchoolEvent[] = [
+  {
+    id: 'evt-1',
+    title: 'New Academic Admissions Open for Primary Classes',
+    date: 'Academic Year 2025–2026',
+    category: 'Admissions',
+    description: 'Admissions are currently underway for Playgroup, Nursery, Prep, and Primary Classes 1 through 5. Parents are welcome to apply online or visit the school desk.',
+    image: '/uploads/img_1790579309606_jtks49.jpg',
+    isImportant: true,
+    createdAt: '2026-09-28T06:54:54.754Z'
+  },
+  {
+    id: 'evt-2',
+    title: 'First Term Parent-Teacher Meeting',
+    date: 'Upcoming Saturday',
+    category: 'Meeting',
+    description: 'A constructive session for parents to discuss their child’s academic progress, daily classroom engagement, and moral development with class teachers.',
+    image: '/uploads/img_1790579363398_42kags.jpg',
+    isImportant: false,
+    createdAt: '2026-09-28T06:54:54.754Z'
+  },
+  {
+    id: 'evt-3',
+    title: 'Primary Health, Cleanliness & Good Habits Week',
+    date: 'School Activity Week',
+    category: 'Activity',
+    description: 'Special morning assembly talks and practical exercises on hand hygiene, neat uniforms, polite greetings, and respectful classroom conduct.',
+    image: '/uploads/img_1790579450851_pw75up.jpg',
+    isImportant: false,
+    createdAt: '2026-09-28T06:54:54.754Z'
+  }
+];
+
+const DEFAULT_GALLERY: GalleryItem[] = [
+  {
+    id: 'gal-1',
+    title: 'Primary Classroom Learning',
+    category: 'Classroom',
+    imageUrl: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    caption: 'Students engaged in interactive classroom lessons with dedicated teachers.',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'gal-2',
+    title: 'Early Childhood Play & Learning',
+    category: 'Activities',
+    imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80',
+    caption: 'Playgroup and nursery children learning through guided educational activities.',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'gal-3',
+    title: 'Creative Art & Coloring Session',
+    category: 'Activities',
+    imageUrl: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=800&q=80',
+    caption: 'Students developing fine motor skills and creativity in drawing sessions.',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'gal-4',
+    title: 'Outdoor Physical Sports',
+    category: 'Sports',
+    imageUrl: 'https://images.unsplash.com/photo-1526676037777-05a232554f77?auto=format&fit=crop&w=800&q=80',
+    caption: 'Joyful physical exercise and sports games in the school play area.',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'gal-5',
+    title: 'Morning Assembly & Discipline',
+    category: 'School',
+    imageUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80',
+    caption: 'Morning prayer, recitation, and discipline in daily morning assembly.',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'gal-6',
+    title: 'Reading & Storytelling Corner',
+    category: 'Classroom',
+    imageUrl: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800&q=80',
+    caption: 'Cultivating strong reading habits in early childhood students.',
+    createdAt: new Date().toISOString()
+  }
+];
+
+class Database {
+  private data: DatabaseSchema;
+  private isInitialized = false;
+
+  constructor() {
+    this.data = this.getDefaults();
+  }
+
+  private getDefaults(): DatabaseSchema {
+    return {
+      settings: { ...DEFAULT_SETTINGS },
+      classes: [...DEFAULT_CLASSES],
+      subjects: [...DEFAULT_SUBJECTS],
+      teachers: [...DEFAULT_TEACHERS],
+      activities: [...DEFAULT_ACTIVITIES],
+      events: [...DEFAULT_EVENTS],
+      gallery: [...DEFAULT_GALLERY],
+      admissions: [],
+      contactMessages: []
+    };
+  }
+
+  public init() {
+    if (this.isInitialized) return;
+    try {
+      if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+      }
+
+      if (fs.existsSync(DB_FILE)) {
+        const raw = fs.readFileSync(DB_FILE, 'utf-8');
+        const parsed = JSON.parse(raw);
+        const defaults = this.getDefaults();
+
+        // Merge settings: preserve all user-saved values permanently, only filling in missing schema fields
+        const mergedSettings: SchoolSettings = {
+          ...defaults.settings,
+          ...(parsed.settings || {})
+        };
+        if (!mergedSettings.adminPasswordHash || mergedSettings.adminPasswordHash === 'admin123') {
+          mergedSettings.adminPasswordHash = '9159224';
+        }
+
+        this.data = {
+          settings: mergedSettings,
+          classes: Array.isArray(parsed.classes) ? parsed.classes : defaults.classes,
+          subjects: Array.isArray(parsed.subjects) ? parsed.subjects : defaults.subjects,
+          teachers: Array.isArray(parsed.teachers) ? parsed.teachers : defaults.teachers,
+          activities: Array.isArray(parsed.activities) ? parsed.activities : defaults.activities,
+          events: Array.isArray(parsed.events) ? parsed.events : defaults.events,
+          gallery: Array.isArray(parsed.gallery) ? parsed.gallery : defaults.gallery,
+          admissions: Array.isArray(parsed.admissions) ? parsed.admissions : defaults.admissions,
+          contactMessages: Array.isArray(parsed.contactMessages) ? parsed.contactMessages : defaults.contactMessages
+        };
+        this.save();
+      } else {
+        this.data = this.getDefaults();
+        this.save();
+      }
+      this.isInitialized = true;
+      console.log('Database initialized successfully.');
+    } catch (err) {
+      console.error('Error initializing database file:', err);
+      this.data = this.getDefaults();
+      this.isInitialized = true;
+    }
+  }
+
+  private save() {
+    try {
+      if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+      }
+      const tmpFile = `${DB_FILE}.tmp`;
+      fs.writeFileSync(tmpFile, JSON.stringify(this.data, null, 2), 'utf-8');
+      fs.renameSync(tmpFile, DB_FILE);
+    } catch (err) {
+      console.error('Failed to save database file:', err);
+    }
+  }
+
+  // --- Settings ---
+  public getSettings(): SchoolSettings {
+    this.init();
+    return this.data.settings;
+  }
+
+  public updateSettings(partial: Partial<SchoolSettings>): SchoolSettings {
+    this.init();
+    this.data.settings = { ...this.data.settings, ...partial };
+    this.save();
+    return this.data.settings;
+  }
+
+  // --- Classes ---
+  public getClasses(): SchoolClass[] {
+    this.init();
+    return [...this.data.classes].sort((a, b) => a.order - b.order);
+  }
+
+  public addClass(cls: Omit<SchoolClass, 'id'>): SchoolClass {
+    this.init();
+    const newClass: SchoolClass = {
+      ...cls,
+      id: `class-${Date.now()}`
+    };
+    this.data.classes.push(newClass);
+    this.save();
+    return newClass;
+  }
+
+  public updateClass(id: string, partial: Partial<SchoolClass>): SchoolClass | null {
+    this.init();
+    const idx = this.data.classes.findIndex(c => c.id === id);
+    if (idx === -1) return null;
+    this.data.classes[idx] = { ...this.data.classes[idx], ...partial };
+    this.save();
+    return this.data.classes[idx];
+  }
+
+  public deleteClass(id: string): boolean {
+    this.init();
+    const initialLen = this.data.classes.length;
+    this.data.classes = this.data.classes.filter(c => c.id !== id);
+    if (this.data.classes.length !== initialLen) {
+      this.save();
+      return true;
+    }
+    return false;
+  }
+
+  // --- Subjects ---
+  public getSubjects(): SchoolSubject[] {
+    this.init();
+    return [...this.data.subjects].sort((a, b) => a.order - b.order);
+  }
+
+  public addSubject(sub: Omit<SchoolSubject, 'id'>): SchoolSubject {
+    this.init();
+    const newSub: SchoolSubject = {
+      ...sub,
+      id: `sub-${Date.now()}`
+    };
+    this.data.subjects.push(newSub);
+    this.save();
+    return newSub;
+  }
+
+  public updateSubject(id: string, partial: Partial<SchoolSubject>): SchoolSubject | null {
+    this.init();
+    const idx = this.data.subjects.findIndex(s => s.id === id);
+    if (idx === -1) return null;
+    this.data.subjects[idx] = { ...this.data.subjects[idx], ...partial };
+    this.save();
+    return this.data.subjects[idx];
+  }
+
+  public deleteSubject(id: string): boolean {
+    this.init();
+    const initialLen = this.data.subjects.length;
+    this.data.subjects = this.data.subjects.filter(s => s.id !== id);
+    if (this.data.subjects.length !== initialLen) {
+      this.save();
+      return true;
+    }
+    return false;
+  }
+
+  // --- Teachers ---
+  public getTeachers(): Teacher[] {
+    this.init();
+    return [...this.data.teachers].sort((a, b) => a.order - b.order);
+  }
+
+  public addTeacher(t: Omit<Teacher, 'id'>): Teacher {
+    this.init();
+    const newTeacher: Teacher = {
+      ...t,
+      id: `tch-${Date.now()}`
+    };
+    this.data.teachers.push(newTeacher);
+    this.save();
+    return newTeacher;
+  }
+
+  public updateTeacher(id: string, partial: Partial<Teacher>): Teacher | null {
+    this.init();
+    const idx = this.data.teachers.findIndex(t => t.id === id);
+    if (idx === -1) return null;
+    this.data.teachers[idx] = { ...this.data.teachers[idx], ...partial };
+    this.save();
+    return this.data.teachers[idx];
+  }
+
+  public deleteTeacher(id: string): boolean {
+    this.init();
+    const initialLen = this.data.teachers.length;
+    this.data.teachers = this.data.teachers.filter(t => t.id !== id);
+    if (this.data.teachers.length !== initialLen) {
+      this.save();
+      return true;
+    }
+    return false;
+  }
+
+  // --- Activities ---
+  public getActivities(): Activity[] {
+    this.init();
+    return [...this.data.activities].sort((a, b) => a.order - b.order);
+  }
+
+  public addActivity(act: Omit<Activity, 'id'>): Activity {
+    this.init();
+    const newAct: Activity = {
+      ...act,
+      id: `act-${Date.now()}`
+    };
+    this.data.activities.push(newAct);
+    this.save();
+    return newAct;
+  }
+
+  public updateActivity(id: string, partial: Partial<Activity>): Activity | null {
+    this.init();
+    const idx = this.data.activities.findIndex(a => a.id === id);
+    if (idx === -1) return null;
+    this.data.activities[idx] = { ...this.data.activities[idx], ...partial };
+    this.save();
+    return this.data.activities[idx];
+  }
+
+  public deleteActivity(id: string): boolean {
+    this.init();
+    const initialLen = this.data.activities.length;
+    this.data.activities = this.data.activities.filter(a => a.id !== id);
+    if (this.data.activities.length !== initialLen) {
+      this.save();
+      return true;
+    }
+    return false;
+  }
+
+  // --- Events ---
+  public getEvents(): SchoolEvent[] {
+    this.init();
+    return [...this.data.events].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  public addEvent(evt: Omit<SchoolEvent, 'id' | 'createdAt'>): SchoolEvent {
+    this.init();
+    const newEvt: SchoolEvent = {
+      ...evt,
+      id: `evt-${Date.now()}`,
+      createdAt: new Date().toISOString()
+    };
+    this.data.events.unshift(newEvt);
+    this.save();
+    return newEvt;
+  }
+
+  public updateEvent(id: string, partial: Partial<SchoolEvent>): SchoolEvent | null {
+    this.init();
+    const idx = this.data.events.findIndex(e => e.id === id);
+    if (idx === -1) return null;
+    this.data.events[idx] = { ...this.data.events[idx], ...partial };
+    this.save();
+    return this.data.events[idx];
+  }
+
+  public deleteEvent(id: string): boolean {
+    this.init();
+    const initialLen = this.data.events.length;
+    this.data.events = this.data.events.filter(e => e.id !== id);
+    if (this.data.events.length !== initialLen) {
+      this.save();
+      return true;
+    }
+    return false;
+  }
+
+  // --- Gallery ---
+  public getGallery(): GalleryItem[] {
+    this.init();
+    return [...this.data.gallery].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  public addGalleryItem(item: Omit<GalleryItem, 'id' | 'createdAt'>): GalleryItem {
+    this.init();
+    const newItem: GalleryItem = {
+      ...item,
+      id: `gal-${Date.now()}`,
+      createdAt: new Date().toISOString()
+    };
+    this.data.gallery.unshift(newItem);
+    this.save();
+    return newItem;
+  }
+
+  public updateGalleryItem(id: string, partial: Partial<GalleryItem>): GalleryItem | null {
+    this.init();
+    const idx = this.data.gallery.findIndex(g => g.id === id);
+    if (idx === -1) return null;
+    this.data.gallery[idx] = { ...this.data.gallery[idx], ...partial };
+    this.save();
+    return this.data.gallery[idx];
+  }
+
+  public deleteGalleryItem(id: string): boolean {
+    this.init();
+    const initialLen = this.data.gallery.length;
+    this.data.gallery = this.data.gallery.filter(g => g.id !== id);
+    if (this.data.gallery.length !== initialLen) {
+      this.save();
+      return true;
+    }
+    return false;
+  }
+
+  // --- Admissions ---
+  public getAdmissions(): AdmissionApplication[] {
+    this.init();
+    return [...this.data.admissions].sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+  }
+
+  public addAdmission(app: Omit<AdmissionApplication, 'id' | 'referenceNumber' | 'status' | 'submittedAt'>): AdmissionApplication {
+    this.init();
+    const year = new Date().getFullYear();
+    const count = this.data.admissions.length + 1;
+    const refNum = `ASAR-${year}-${String(count).padStart(4, '0')}`;
+
+    const newApp: AdmissionApplication = {
+      ...app,
+      id: `adm-${Date.now()}`,
+      referenceNumber: refNum,
+      status: 'Pending',
+      submittedAt: new Date().toISOString()
+    };
+    this.data.admissions.unshift(newApp);
+    this.save();
+    return newApp;
+  }
+
+  public updateAdmissionStatus(id: string, status: AdmissionApplication['status'], adminNotes?: string): AdmissionApplication | null {
+    this.init();
+    const idx = this.data.admissions.findIndex(a => a.id === id);
+    if (idx === -1) return null;
+    this.data.admissions[idx].status = status;
+    if (adminNotes !== undefined) {
+      this.data.admissions[idx].adminNotes = adminNotes;
+    }
+    this.save();
+    return this.data.admissions[idx];
+  }
+
+  public deleteAdmission(id: string): boolean {
+    this.init();
+    const initialLen = this.data.admissions.length;
+    this.data.admissions = this.data.admissions.filter(a => a.id !== id);
+    if (this.data.admissions.length !== initialLen) {
+      this.save();
+      return true;
+    }
+    return false;
+  }
+
+  // --- Contact Messages ---
+  public getContactMessages(): ContactMessage[] {
+    this.init();
+    return [...this.data.contactMessages].sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+  }
+
+  public addContactMessage(msg: Omit<ContactMessage, 'id' | 'isRead' | 'status' | 'submittedAt'>): ContactMessage {
+    this.init();
+    const newMsg: ContactMessage = {
+      ...msg,
+      id: `msg-${Date.now()}`,
+      isRead: false,
+      status: 'New',
+      submittedAt: new Date().toISOString()
+    };
+    this.data.contactMessages.unshift(newMsg);
+    this.save();
+    return newMsg;
+  }
+
+  public updateMessageStatus(id: string, status: ContactMessage['status'], isRead?: boolean): ContactMessage | null {
+    this.init();
+    const idx = this.data.contactMessages.findIndex(m => m.id === id);
+    if (idx === -1) return null;
+    this.data.contactMessages[idx].status = status;
+    if (isRead !== undefined) {
+      this.data.contactMessages[idx].isRead = isRead;
+    }
+    this.save();
+    return this.data.contactMessages[idx];
+  }
+
+  public deleteContactMessage(id: string): boolean {
+    this.init();
+    const initialLen = this.data.contactMessages.length;
+    this.data.contactMessages = this.data.contactMessages.filter(m => m.id !== id);
+    if (this.data.contactMessages.length !== initialLen) {
+      this.save();
+      return true;
+    }
+    return false;
+  }
+}
+
+export const db = new Database();

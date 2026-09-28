@@ -1,0 +1,15 @@
+# robots.txt for Al-Asar International Model School
+# Website: Lahor (Chota Lahore), Swabi, Khyber Pakhtunkhwa, Pakistan
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin
+Disallow: /dashboard
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://al-asar-school.edu.pk/sitemap.xml
+Sitemap: /sitemap.xml
